@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Exit Price</title>
+    <script>
+        async function predictExit() {
+            const symbol = document.getElementById("symbol").value.trim();
+            if (!symbol) { alert("Enter a stock symbol!"); return; }
+
+            const response = await fetch('/predict_exit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "symbol": symbol })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = data.error ?
+                `Error: ${data.error}` :
+                `📈 Predicted Exit Price: ${data.predicted_exit_price.toFixed(2)}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Predict Exit Price</h1>
+    <input type="text" id="symbol" placeholder="Enter Stock Symbol">
+    <button onclick="predictExit()">Predict</button>
+    <p id="result"></p>
+    <a href="/"><button>Home</button></a>
+</body>
+</html>

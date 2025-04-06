@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Train Model</title>
+    <script>
+        async function trainModel() {
+            const symbol = document.getElementById("symbol").value.trim();
+            if (!symbol) { alert("Enter a stock symbol!"); return; }
+
+            const response = await fetch('/train_model', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "symbol": symbol })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = data.error ?
+                `Error: ${data.error}` :
+                `✅ Model Trained! \nMSE: ${data.mse.toFixed(2)} \nR²: ${data.r2.toFixed(2)}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Train Model</h1>
+    <input type="text" id="symbol" placeholder="Enter Stock Symbol">
+    <button onclick="trainModel()">Train</button>
+    <p id="result"></p>
+    <a href="/predict"><button>Predict Exit Price</button></a>
+</body>
+</html>

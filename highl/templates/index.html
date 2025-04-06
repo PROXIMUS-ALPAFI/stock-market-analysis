@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fetch Stock Data</title>
+    <script>
+        async function getStockData() {
+            const symbol = document.getElementById("symbol").value.trim();
+            if (!symbol) { alert("Enter a stock symbol!"); return; }
+
+            const response = await fetch('/get_stock_data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "symbol": symbol })
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = data.error ? `Error: ${data.error}` : data.message;
+        }
+    </script>
+</head>
+<body>
+    <h1>Fetch Stock Data</h1>
+    <input type="text" id="symbol" placeholder="Enter Stock Symbol">
+    <button onclick="getStockData()">Get Data</button>
+    <p id="result"></p>
+    <a href="/train"><button>Train Model</button></a>
+</body>
+</html>
